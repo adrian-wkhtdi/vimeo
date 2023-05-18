@@ -442,7 +442,6 @@
                 $("html, body").animate({ scrollTop: 0 }, "slow");
 
                 const $pageIndexElements = $('.page-index');
-
                 const thisTimeout = setTimeout(function () {
                     new Swiper(".swiper-container", {
                         loop: true,
@@ -2309,9 +2308,7 @@
             </div>
         </div>
 
-
         <div class="mn-popup-curtain"></div>
-
 
         <div id="potter_wilson" class="mn-popup">
             <div class="row">
@@ -2949,7 +2946,6 @@
         <script>
             var isInformation = false;
             var isIndex = false;
-            var lastScrollV = 0;
 
             jQuery(function ($) {
                 let activeSlide = $('.swiper-slide-active .vimeo-wrapper');
@@ -2964,6 +2960,7 @@
                 const $informationSecElement = $('#infomation-sec');
                 const $menuLink_information = $('#menu-item-416 a');
                 const $menuLink_index = $('#menu-item-415 a');
+                const $mainMenuLinkElements = $('#menu-main-menu li a');
 
                 if (firstVimeo) {
                     let vimeoSnippet = '<iframe src="https://player.vimeo.com/video/' + firstVimeo + '?background=1&autoplay=1&loop=1&byline=0&title=0" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>';
@@ -2977,16 +2974,9 @@
                     nextSlide.attr('video-loaded', 'true');
                 }
 
-                $informationSecElement.on('scroll', function () {
-                    if (isInformation) {
-                        lastScrollV = $(this).scrollTop();
-                    }
-                });
-
                 $('.mn-popup-trigger').click(function (e) {
                     e.preventDefault();
                     let target = $(this).attr('href');
-
                     $(target).addClass('open');
                     $popupCourtainElements.addClass('open');
                 });
@@ -3094,7 +3084,7 @@
                                 $indexSecElement.removeClass("show").addClass("hide");
                             }, 1000);
                             $body.addClass('dark-nav');
-                            jQuery('#menu-main-menu li a').removeClass("white");
+                            $mainMenuLinkElements.removeClass("white");
 
                         } else {
                             isInformation = true;
@@ -3105,7 +3095,7 @@
                             }, 1000);
 
                             $body.addClass('dark-nav');
-                            jQuery('#menu-main-menu li a').removeClass("white");
+                            $mainMenuLinkElements.removeClass("white");
                         }
                     });
 
