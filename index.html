@@ -3047,7 +3047,7 @@
                             $popupOpenElements.removeClass('open');
                         });
 
-                        jQuery('.madenorth a').click(function (e) {
+                        $('.madenorth a').click(function (e) {
                             e.preventDefault();
 
                             $('#index-sec, #infomation-sec, .banner-mobile').hide();
@@ -3124,7 +3124,7 @@
                                 $informationSecElement.css("z-index", "");
                             }, 1000);
                             $body.addClass('dark-nav');
-                            jQuery('#menu-main-menu li a, .madenorth a').removeClass("white");
+                            $('#menu-main-menu li a, .madenorth a').removeClass("white");
 
 
                         } else {
@@ -3138,26 +3138,26 @@
                                 $informationSecElement.css("z-index", "");
                             }, 1000);
                             $body.addClass('dark-nav');
-                            jQuery('#menu-main-menu li a, .madenorth a').removeClass("white");
+                            $('#menu-main-menu li a, .madenorth a').removeClass("white");
                         }
                     });
 
 
-                    jQuery('header.siteheader .logo span').click(function (e) {
+                    $('header.siteheader .logo span').click(function (e) {
                         e.preventDefault();
                         isInformation = false;
-                        jQuery('#infomation-sec, #index-sec').css("z-index", "1");
-                        jQuery('.banner-mobile').addClass("show");
+                        $('#infomation-sec, #index-sec').css("z-index", "1");
+                        $('.banner-mobile').addClass("show");
 
                         setTimeout(function () {
 
-                            jQuery('div#infomation-sec, div#index-sec').addClass('hide').removeClass("show");
-                            jQuery('#infomation-sec, #index-sec').css("z-index", "");
+                            $('div#infomation-sec, div#index-sec').addClass('hide').removeClass("show");
+                            $('#infomation-sec, #index-sec').css("z-index", "");
 
                         }, 200);
 
                         $body.removeClass('dark-nav');
-                        jQuery('#menu-main-menu li a, .madenorth a').removeClass("white");
+                        $('#menu-main-menu li a, .madenorth a').removeClass("white");
                     });
                 }
             });
