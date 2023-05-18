@@ -2994,9 +2994,7 @@
             var distance = $('#infomation-sec').offset().top;
             var lastScrollV = 0;
 
-
             jQuery(function ($) {
-
                 let activeSlide = $('.swiper-slide-active .vimeo-wrapper');
                 let nextSlide = $('.swiper-slide-next .vimeo-wrapper');
 
@@ -3015,12 +3013,10 @@
                     $(nextSlide).attr('video-loaded', 'true');
                 }
 
-
                 $('#infomation-sec').on('scroll', function () {
                     if (isInformation) {
                         lastScrollV = $(this).scrollTop();
                     }
-
                 });
 
                 $('.mn-popup-trigger').click(function (e) {
@@ -3029,8 +3025,6 @@
 
                     $(target).addClass('open');
                     $('.mn-popup-curtain').addClass('open');
-
-                    // console.log(target);
                 });
 
                 $('.close-btn').click(function (e) {
@@ -3048,9 +3042,7 @@
             });
 
             if ($(window).width() < 596) {
-
                 $(function () {
-
                     jQuery('.menu-item-415 a').click(function (e) {
                         e.preventDefault();
 
@@ -3073,7 +3065,6 @@
 
                         $('.mn-popup-curtain').removeClass('open');
                         $('.mn-popup.open').removeClass('open');
-
                     });
 
                     jQuery('.menu-item-416 a').click(function (e) {
@@ -3101,7 +3092,6 @@
                     });
 
                     jQuery('.madenorth a').click(function (e) {
-
                         e.preventDefault();
 
                         $('#index-sec, #infomation-sec, .banner-mobile').hide();
@@ -3114,8 +3104,6 @@
                 });
 
             } else {
-
-
                 jQuery('.menu-item-416 a').click(function (e) {
                     e.preventDefault();
 
@@ -3159,9 +3147,7 @@
 
 
                 jQuery('.menu-item-415 a').click(function (e) {
-
                     e.preventDefault();
-
 
                     if (isIndex) {
                         jQuery('div#infomation-sec').css("z-index", "");
@@ -3190,7 +3176,6 @@
 
 
                     } else {
-
                         isIndex = true;
                         jQuery('div#infomation-sec').css("z-index", "1");
 
@@ -3203,8 +3188,6 @@
                         jQuery('body').addClass('dark-nav');
                         jQuery('#menu-main-menu li a, .madenorth a').removeClass("white");
                     }
-
-
                 });
 
 
@@ -3220,7 +3203,6 @@
                         jQuery('#infomation-sec, #index-sec').css("z-index", "");
 
                     }, 200);
-
 
                     jQuery('body').removeClass('dark-nav');
                     jQuery('#menu-main-menu li a, .madenorth a').removeClass("white");
