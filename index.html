@@ -440,61 +440,6 @@
             function goToPage(numberPage) {
                 $(".madenorth a").click();
                 $("html, body").animate({ scrollTop: 0 }, "slow");
-
-                const $pageIndexElements = $('.page-index');
-                const thisTimeout = setTimeout(function () {
-                    new Swiper(".swiper-container", {
-                        loop: true,
-                        effect: 'fade',
-                        autoplay: false,
-                        speed: 800,
-                        nextButton: '.page-arrow.arrow-right',
-                        prevButton: '.page-arrow.arrow-left',
-                        onSlideChangeStart: function (swiper) {
-                            var index = swiper.realIndex + 1;
-                            var max = swiper.slides.length - 2;
-
-                            $pageIndexElements.text(index);
-                            $('.page-count').text(max);
-
-                            var slide = swiper.slides[swiper.activeIndex];
-                            const $slide = $(slide);
-
-                            $('.page-slide-caption.mobile').html($slide.find('.page-slide-caption.desktop').html());
-                            $('.swiper-container video').each(function () {
-                                this.pause();
-                            });
-
-                            var video = $slide.find('video')[0];
-                            if (typeof video !== 'undefined') {
-                                video.currentTime = 0;
-                                video.play();
-                            }
-
-                            let nextVideo = $slide.find('.vimeo-wrapper');
-
-                            if (nextVideo.length > 0) {
-                                let vimeoID = nextVideo.attr('vimeo-id');
-                                let videoLoaded = nextVideo.attr('video-loaded');
-                                if (vimeoID && videoLoaded == 'false') {
-                                    let vimeoSnippet = '<iframe src="https://player.vimeo.com/video/' + vimeoID + '?background=1&autoplay=1&loop=1&byline=0&title=0" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>';
-                                    nextVideo.append(vimeoSnippet);
-                                    nextVideo.attr('video-loaded', 'true');
-                                }
-                            }
-
-                            if ($slide.hasClass('reverse-text')) {
-                                $('body').addClass('reverse-text');
-                            } else {
-                                $('body').removeClass('reverse-text');
-                            }
-                        }
-                    }).slideTo(numberPage, 0, true);
-
-                    $pageIndexElements.html(numberPage);
-                }, 500);
-
-                clearTimeout(thisTimeout);
             }
 
             $(document).ready(function () {
@@ -507,7 +452,7 @@
                     loop: true,
                     effect: 'fade',
                     autoplay: false,
-                    speed: 1000,
+                    speed: 900,
                     nextButton: '.page-arrow.arrow-right',
                     prevButton: '.page-arrow.arrow-left',
                     onSlideChangeStart: function (swiper) {
@@ -516,6 +461,7 @@
                         var slide = swiper.slides[swiper.activeIndex];
                         var slide1 = swiper.slides[swiper.activeIndex + 1];
 
+                        const $body = $('body');
                         const $currentSlideElement = $(slide);
                         const $currentSlideVideoWrapper = $currentSlideElement.find('.vimeo-wrapper');
                         const $nextSlideElement = $(slide1);
@@ -525,16 +471,6 @@
                         $pageCountElements.text(max);
 
                         $('.page-slide-caption.mobile').html($currentSlideElement.find('.page-slide-caption.desktop').html());
-
-                        $('.swiper-container video').each(function () {
-                            this.pause();
-                        });
-
-                        var video = $currentSlideElement.find('video')[0];
-                        if (typeof video !== 'undefined') {
-                            video.currentTime = 0;
-                            video.play();
-                        }
 
                         if ($currentSlideVideoWrapper.length > 0) {
                             const vimeoID = $currentSlideVideoWrapper.attr('vimeo-id');
@@ -567,9 +503,9 @@
 
                         // Reverse text
                         if ($currentSlideElement.hasClass('reverse-text')) {
-                            $('body').addClass('reverse-text');
+                            $body.addClass('reverse-text');
                         } else {
-                            $('body').removeClass('reverse-text');
+                            $body.removeClass('reverse-text');
                         }
                     }
                 });
@@ -1191,7 +1127,7 @@
                 <div class="images-gallery">
                     <div class="first-gallery-img col-padding" onClick="goToPage(1);">
                         <div class="imgg">
-                            <img src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2023/04/Altus-logo-scaled.jpg" />
+                            <img loading="lazy" src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2023/04/Altus-logo-scaled.jpg" />
                         </div>
                         <div class="content-block">
                             <div class="content-tag-line">
@@ -1202,7 +1138,7 @@
                     </div>
                     <div class="first-gallery-img col-padding" onClick="goToPage(2);">
                         <div class="imgg">
-                            <img src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2023/05/MN-Altus-03.jpg" />
+                            <img loading="lazy" src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2023/05/MN-Altus-03.jpg" />
                         </div>
                         <div class="content-block">
                             <div class="content-tag-line">
@@ -1213,7 +1149,7 @@
                     </div>
                     <div class="first-gallery-img col-padding" onClick="goToPage(3);">
                         <div class="imgg">
-                            <img src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2023/04/Altus-Social.jpg" />
+                            <img loading="lazy" src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2023/04/Altus-Social.jpg" />
                         </div>
                         <div class="content-block">
                             <div class="content-tag-line">
@@ -1224,7 +1160,7 @@
                     </div>
                     <div class="first-gallery-img col-padding" onClick="goToPage(4);">
                         <div class="imgg">
-                            <img src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2023/04/Possible-Logo-scaled.jpg" />
+                            <img loading="lazy" src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2023/04/Possible-Logo-scaled.jpg" />
                         </div>
                         <div class="content-block">
                             <div class="content-tag-line">
@@ -1235,7 +1171,7 @@
                     </div>
                     <div class="first-gallery-img col-padding" onClick="goToPage(5);">
                         <div class="imgg">
-                            <img src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2023/04/Possible-Socials.jpg" />
+                            <img loading="lazy" src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2023/04/Possible-Socials.jpg" />
                         </div>
                         <div class="content-block">
                             <div class="content-tag-line">
@@ -1246,7 +1182,7 @@
                     </div>
                     <div class="first-gallery-img col-padding" onClick="goToPage(6);">
                         <div class="imgg">
-                            <img src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2023/05/MN_Possible-Brochures-scaled.jpg" />
+                            <img loading="lazy" src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2023/05/MN_Possible-Brochures-scaled.jpg" />
                         </div>
                         <div class="content-block">
                             <div class="content-tag-line">
@@ -1257,7 +1193,7 @@
                     </div>
                     <div class="first-gallery-img col-padding" onClick="goToPage(7);">
                         <div class="imgg">
-                            <img src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/09/MN_Possible-Social-scaled.jpg" />
+                            <img loading="lazy" src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/09/MN_Possible-Social-scaled.jpg" />
                         </div>
                         <div class="content-block">
                             <div class="content-tag-line">
@@ -1268,7 +1204,7 @@
                     </div>
                     <div class="first-gallery-img col-padding" onClick="goToPage(8);">
                         <div class="imgg">
-                            <img src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/09/MN_Possible-Web-Gif.gif" />
+                            <img loading="lazy" src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/09/MN_Possible-Web-Gif.gif" />
                         </div>
                         <div class="content-block">
                             <div class="content-tag-line">
@@ -1279,7 +1215,7 @@
                     </div>
                     <div class="first-gallery-img col-padding" onClick="goToPage(9);">
                         <div class="imgg">
-                            <img src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/09/DSG-Gif-Frames.gif" />
+                            <img loading="lazy" src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/09/DSG-Gif-Frames.gif" />
                         </div>
                         <div class="content-block">
                             <div class="content-tag-line">
@@ -1290,7 +1226,7 @@
                     </div>
                     <div class="first-gallery-img col-padding" onClick="goToPage(10);">
                         <div class="imgg">
-                            <img src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/09/MN-DSG-01A-scaled.jpg" />
+                            <img loading="lazy" src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/09/MN-DSG-01A-scaled.jpg" />
                         </div>
                         <div class="content-block">
                             <div class="content-tag-line">
@@ -1301,7 +1237,7 @@
                     </div>
                     <div class="first-gallery-img col-padding" onClick="goToPage(11);">
                         <div class="imgg">
-                            <img src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/07/MN-DSG-04.jpg" />
+                            <img loading="lazy" src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/07/MN-DSG-04.jpg" />
                         </div>
                         <div class="content-block">
                             <div class="content-tag-line">
@@ -1312,7 +1248,7 @@
                     </div>
                     <div class="first-gallery-img col-padding" onClick="goToPage(12);">
                         <div class="imgg">
-                            <img src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/09/MN-DSG-03A-scaled.jpg" />
+                            <img loading="lazy" src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/09/MN-DSG-03A-scaled.jpg" />
                         </div>
                         <div class="content-block">
                             <div class="content-tag-line">
@@ -1323,7 +1259,7 @@
                     </div>
                     <div class="first-gallery-img col-padding" onClick="goToPage(13);">
                         <div class="imgg">
-                            <img src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/09/MN-DSG-02A-scaled.jpg" />
+                            <img loading="lazy" src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/09/MN-DSG-02A-scaled.jpg" />
                         </div>
                         <div class="content-block">
                             <div class="content-tag-line">
@@ -1334,7 +1270,7 @@
                     </div>
                     <div class="first-gallery-img col-padding" onClick="goToPage(14);">
                         <div class="imgg">
-                            <img src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/07/MN-DSG-05.jpg" />
+                            <img loading="lazy" src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/07/MN-DSG-05.jpg" />
                         </div>
                         <div class="content-block">
                             <div class="content-tag-line">
@@ -1345,7 +1281,7 @@
                     </div>
                     <div class="first-gallery-img col-padding" onClick="goToPage(15);">
                         <div class="imgg">
-                            <img src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2023/04/DSG-Web-scaled.jpg" />
+                            <img loading="lazy" src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2023/04/DSG-Web-scaled.jpg" />
                         </div>
                         <div class="content-block">
                             <div class="content-tag-line">
@@ -1356,7 +1292,7 @@
                     </div>
                     <div class="first-gallery-img col-padding" onClick="goToPage(16);">
                         <div class="imgg">
-                            <img src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2023/04/MN-Folkal-Posters.jpg" />
+                            <img loading="lazy" src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2023/04/MN-Folkal-Posters.jpg" />
                         </div>
                         <div class="content-block">
                             <div class="content-tag-line">
@@ -1367,7 +1303,7 @@
                     </div>
                     <div class="first-gallery-img col-padding" onClick="goToPage(17);">
                         <div class="imgg">
-                            <img src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2023/04/Folkal-Social.jpg" />
+                            <img loading="lazy" src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2023/04/Folkal-Social.jpg" />
                         </div>
                         <div class="content-block">
                             <div class="content-tag-line">
@@ -1378,7 +1314,7 @@
                     </div>
                     <div class="first-gallery-img col-padding" onClick="goToPage(18);">
                         <div class="imgg">
-                            <img src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2023/04/MN-Folkal-Adshel.jpg" />
+                            <img loading="lazy" src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2023/04/MN-Folkal-Adshel.jpg" />
                         </div>
                         <div class="content-block">
                             <div class="content-tag-line">
@@ -1389,7 +1325,7 @@
                     </div>
                     <div class="first-gallery-img col-padding" onClick="goToPage(19);">
                         <div class="imgg">
-                            <img src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/07/MN-Warm-Home-05.jpg" />
+                            <img loading="lazy" src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/07/MN-Warm-Home-05.jpg" />
                         </div>
                         <div class="content-block">
                             <div class="content-tag-line">
@@ -1400,7 +1336,7 @@
                     </div>
                     <div class="first-gallery-img col-padding" onClick="goToPage(20);">
                         <div class="imgg">
-                            <img src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/07/MN-Warm-Home-03.jpg" />
+                            <img loading="lazy" src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/07/MN-Warm-Home-03.jpg" />
                         </div>
                         <div class="content-block">
                             <div class="content-tag-line">
@@ -1411,7 +1347,7 @@
                     </div>
                     <div class="first-gallery-img col-padding" onClick="goToPage(21);">
                         <div class="imgg">
-                            <img src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/07/MN-Warm-Home-04.jpg" />
+                            <img loading="lazy" src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/07/MN-Warm-Home-04.jpg" />
                         </div>
                         <div class="content-block">
                             <div class="content-tag-line">
@@ -1422,7 +1358,7 @@
                     </div>
                     <div class="first-gallery-img col-padding" onClick="goToPage(22);">
                         <div class="imgg">
-                            <img src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2023/04/WarmHOME-Label.jpg" />
+                            <img loading="lazy" src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2023/04/WarmHOME-Label.jpg" />
                         </div>
                         <div class="content-block">
                             <div class="content-tag-line">
@@ -1433,7 +1369,7 @@
                     </div>
                     <div class="first-gallery-img col-padding" onClick="goToPage(23);">
                         <div class="imgg">
-                            <img src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/07/MN-Warm-Home-02.jpg" />
+                            <img loading="lazy" src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/07/MN-Warm-Home-02.jpg" />
                         </div>
                         <div class="content-block">
                             <div class="content-tag-line">
@@ -1444,7 +1380,7 @@
                     </div>
                     <div class="first-gallery-img col-padding" onClick="goToPage(24);">
                         <div class="imgg">
-                            <img src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/07/MN-Warm-Home-06.jpg" />
+                            <img loading="lazy" src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/07/MN-Warm-Home-06.jpg" />
                         </div>
                         <div class="content-block">
                             <div class="content-tag-line">
@@ -1455,7 +1391,7 @@
                     </div>
                     <div class="first-gallery-img col-padding" onClick="goToPage(25);">
                         <div class="imgg">
-                            <img src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/07/MN-Warm-Home-Remixes.jpg" />
+                            <img loading="lazy" src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/07/MN-Warm-Home-Remixes.jpg" />
                         </div>
                         <div class="content-block">
                             <div class="content-tag-line">
@@ -1466,7 +1402,7 @@
                     </div>
                     <div class="first-gallery-img col-padding" onClick="goToPage(26);">
                         <div class="imgg">
-                            <img src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2023/04/Grandiflora-Web.jpg" />
+                            <img loading="lazy" src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2023/04/Grandiflora-Web.jpg" />
                         </div>
                         <div class="content-block">
                             <div class="content-tag-line">
@@ -1477,7 +1413,7 @@
                     </div>
                     <div class="first-gallery-img col-padding" onClick="goToPage(27);">
                         <div class="imgg">
-                            <img src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2023/04/Releaseit-Logo.jpg" />
+                            <img loading="lazy" src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2023/04/Releaseit-Logo.jpg" />
                         </div>
                         <div class="content-block">
                             <div class="content-tag-line">
@@ -1488,7 +1424,7 @@
                     </div>
                     <div class="first-gallery-img col-padding" onClick="goToPage(28);">
                         <div class="imgg">
-                            <img src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/07/MN_RIT-Guidelines.gif" />
+                            <img loading="lazy" src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/07/MN_RIT-Guidelines.gif" />
                         </div>
                         <div class="content-block">
                             <div class="content-tag-line">
@@ -1499,7 +1435,7 @@
                     </div>
                     <div class="first-gallery-img col-padding" onClick="goToPage(29);">
                         <div class="imgg">
-                            <img src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2023/03/MN_Releaseit_02.jpg" />
+                            <img loading="lazy" src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2023/03/MN_Releaseit_02.jpg" />
                         </div>
                         <div class="content-block">
                             <div class="content-tag-line">
@@ -1510,7 +1446,7 @@
                     </div>
                     <div class="first-gallery-img col-padding" onClick="goToPage(30);">
                         <div class="imgg">
-                            <img src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2023/03/MN_Releaseit_03.jpg" />
+                            <img loading="lazy" src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2023/03/MN_Releaseit_03.jpg" />
                         </div>
                         <div class="content-block">
                             <div class="content-tag-line">
@@ -1521,7 +1457,7 @@
                     </div>
                     <div class="first-gallery-img col-padding" onClick="goToPage(31);">
                         <div class="imgg">
-                            <img src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2023/04/PHF-Logo.jpg" />
+                            <img loading="lazy" src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2023/04/PHF-Logo.jpg" />
                         </div>
                         <div class="content-block">
                             <div class="content-tag-line">
@@ -1532,7 +1468,7 @@
                     </div>
                     <div class="first-gallery-img col-padding" onClick="goToPage(32);">
                         <div class="imgg">
-                            <img src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/09/MN-PHF-02.png" />
+                            <img loading="lazy" src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/09/MN-PHF-02.png" />
                         </div>
                         <div class="content-block">
                             <div class="content-tag-line">
@@ -1543,7 +1479,7 @@
                     </div>
                     <div class="first-gallery-img col-padding" onClick="goToPage(33);">
                         <div class="imgg">
-                            <img src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/07/MN-PHF-01.jpg" />
+                            <img loading="lazy" src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/07/MN-PHF-01.jpg" />
                         </div>
                         <div class="content-block">
                             <div class="content-tag-line">
@@ -1554,7 +1490,7 @@
                     </div>
                     <div class="first-gallery-img col-padding" onClick="goToPage(34);">
                         <div class="imgg">
-                            <img src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/09/MN-PHF-03.jpg" />
+                            <img loading="lazy" src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/09/MN-PHF-03.jpg" />
                         </div>
                         <div class="content-block">
                             <div class="content-tag-line">
@@ -1565,7 +1501,7 @@
                     </div>
                     <div class="first-gallery-img col-padding" onClick="goToPage(35);">
                         <div class="imgg">
-                            <img src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2023/04/FPF-Monogram.jpg" />
+                            <img loading="lazy" src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2023/04/FPF-Monogram.jpg" />
                         </div>
                         <div class="content-block">
                             <div class="content-tag-line">
@@ -1576,7 +1512,7 @@
                     </div>
                     <div class="first-gallery-img col-padding" onClick="goToPage(36);">
                         <div class="imgg">
-                            <img src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2023/04/MN-FABPREFAB-03.jpg" />
+                            <img loading="lazy" src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2023/04/MN-FABPREFAB-03.jpg" />
                         </div>
                         <div class="content-block">
                             <div class="content-tag-line">
@@ -1587,7 +1523,7 @@
                     </div>
                     <div class="first-gallery-img col-padding" onClick="goToPage(37);">
                         <div class="imgg">
-                            <img src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/07/MN-FABPREFAB-01.jpg" />
+                            <img loading="lazy" src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/07/MN-FABPREFAB-01.jpg" />
                         </div>
                         <div class="content-block">
                             <div class="content-tag-line">
@@ -1598,7 +1534,7 @@
                     </div>
                     <div class="first-gallery-img col-padding" onClick="goToPage(38);">
                         <div class="imgg">
-                            <img src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/07/MN-FABPREFAB-02.jpg" />
+                            <img loading="lazy" src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/07/MN-FABPREFAB-02.jpg" />
                         </div>
                         <div class="content-block">
                             <div class="content-tag-line">
@@ -1609,7 +1545,7 @@
                     </div>
                     <div class="first-gallery-img col-padding" onClick="goToPage(39);">
                         <div class="imgg">
-                            <img src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/07/MN-FF-Hero.jpg" />
+                            <img loading="lazy" src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/07/MN-FF-Hero.jpg" />
                         </div>
                         <div class="content-block">
                             <div class="content-tag-line">
@@ -1620,7 +1556,7 @@
                     </div>
                     <div class="first-gallery-img col-padding" onClick="goToPage(40);">
                         <div class="imgg">
-                            <img src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/09/MN-FF-BCard-01-scaled.jpg" />
+                            <img loading="lazy" src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/09/MN-FF-BCard-01-scaled.jpg" />
                         </div>
                         <div class="content-block">
                             <div class="content-tag-line">
@@ -1631,7 +1567,7 @@
                     </div>
                     <div class="first-gallery-img col-padding" onClick="goToPage(41);">
                         <div class="imgg">
-                            <img src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/09/MN-FF-Window-scaled.jpg" />
+                            <img loading="lazy" src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/09/MN-FF-Window-scaled.jpg" />
                         </div>
                         <div class="content-block">
                             <div class="content-tag-line">
@@ -1642,7 +1578,7 @@
                     </div>
                     <div class="first-gallery-img col-padding" onClick="goToPage(42);">
                         <div class="imgg">
-                            <img src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/09/MN-FF-Socials-scaled.jpg" />
+                            <img loading="lazy" src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/09/MN-FF-Socials-scaled.jpg" />
                         </div>
                         <div class="content-block">
                             <div class="content-tag-line">
@@ -1653,7 +1589,7 @@
                     </div>
                     <div class="first-gallery-img col-padding" onClick="goToPage(43);">
                         <div class="imgg">
-                            <img src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2023/03/MN-FlyingFish.jpg" />
+                            <img loading="lazy" src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2023/03/MN-FlyingFish.jpg" />
                         </div>
                         <div class="content-block">
                             <div class="content-tag-line">
@@ -1664,7 +1600,7 @@
                     </div>
                     <div class="first-gallery-img col-padding" onClick="goToPage(44);">
                         <div class="imgg">
-                            <img src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2023/03/MN-FlyingFish-01.jpg" />
+                            <img loading="lazy" src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2023/03/MN-FlyingFish-01.jpg" />
                         </div>
                         <div class="content-block">
                             <div class="content-tag-line">
@@ -1675,7 +1611,7 @@
                     </div>
                     <div class="first-gallery-img col-padding" onClick="goToPage(45);">
                         <div class="imgg">
-                            <img src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/09/MN-Plenti-01.jpg" />
+                            <img loading="lazy" src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/09/MN-Plenti-01.jpg" />
                         </div>
                         <div class="content-block">
                             <div class="content-tag-line">
@@ -1686,7 +1622,7 @@
                     </div>
                     <div class="first-gallery-img col-padding" onClick="goToPage(46);">
                         <div class="imgg">
-                            <img src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/10/MN-Plenti-04-scaled.jpg" />
+                            <img loading="lazy" src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/10/MN-Plenti-04-scaled.jpg" />
                         </div>
                         <div class="content-block">
                             <div class="content-tag-line">
@@ -1697,7 +1633,7 @@
                     </div>
                     <div class="first-gallery-img col-padding" onClick="goToPage(47);">
                         <div class="imgg">
-                            <img src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/10/MN-Plenti-06-scaled.jpg" />
+                            <img loading="lazy" src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/10/MN-Plenti-06-scaled.jpg" />
                         </div>
                         <div class="content-block">
                             <div class="content-tag-line">
@@ -1708,7 +1644,7 @@
                     </div>
                     <div class="first-gallery-img col-padding" onClick="goToPage(48);">
                         <div class="imgg">
-                            <img src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2023/03/MN-Plenti-05.jpg" />
+                            <img loading="lazy" src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2023/03/MN-Plenti-05.jpg" />
                         </div>
                         <div class="content-block">
                             <div class="content-tag-line">
@@ -1719,7 +1655,7 @@
                     </div>
                     <div class="first-gallery-img col-padding" onClick="goToPage(49);">
                         <div class="imgg">
-                            <img src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2023/04/PotterWilson-Logo.jpg" />
+                            <img loading="lazy" src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2023/04/PotterWilson-Logo.jpg" />
                         </div>
                         <div class="content-block">
                             <div class="content-tag-line">
@@ -1730,7 +1666,7 @@
                     </div>
                     <div class="first-gallery-img col-padding" onClick="goToPage(50);">
                         <div class="imgg">
-                            <img src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/07/MN-Potter-Wilson-03.jpg" />
+                            <img loading="lazy" src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/07/MN-Potter-Wilson-03.jpg" />
                         </div>
                         <div class="content-block">
                             <div class="content-tag-line">
@@ -1741,7 +1677,7 @@
                     </div>
                     <div class="first-gallery-img col-padding" onClick="goToPage(51);">
                         <div class="imgg">
-                            <img src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/09/MN-Potter-Wilson-02A.jpg" />
+                            <img loading="lazy" src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/09/MN-Potter-Wilson-02A.jpg" />
                         </div>
                         <div class="content-block">
                             <div class="content-tag-line">
@@ -1752,7 +1688,7 @@
                     </div>
                     <div class="first-gallery-img col-padding" onClick="goToPage(52);">
                         <div class="imgg">
-                            <img src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/07/MN-Potter-Wilson-01.jpg" />
+                            <img loading="lazy" src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/07/MN-Potter-Wilson-01.jpg" />
                         </div>
                         <div class="content-block">
                             <div class="content-tag-line">
@@ -1763,7 +1699,7 @@
                     </div>
                     <div class="first-gallery-img col-padding" onClick="goToPage(53);">
                         <div class="imgg">
-                            <img src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2023/04/REWarm-Logo.jpg" />
+                            <img loading="lazy" src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2023/04/REWarm-Logo.jpg" />
                         </div>
                         <div class="content-block">
                             <div class="content-tag-line">
@@ -1774,7 +1710,7 @@
                     </div>
                     <div class="first-gallery-img col-padding" onClick="goToPage(54);">
                         <div class="imgg">
-                            <img src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/07/MN-Re-Warm-03.jpg" />
+                            <img loading="lazy" src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/07/MN-Re-Warm-03.jpg" />
                         </div>
                         <div class="content-block">
                             <div class="content-tag-line">
@@ -1785,7 +1721,7 @@
                     </div>
                     <div class="first-gallery-img col-padding" onClick="goToPage(55);">
                         <div class="imgg">
-                            <img src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2023/04/REWarm-Social.jpg" />
+                            <img loading="lazy" src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2023/04/REWarm-Social.jpg" />
                         </div>
                         <div class="content-block">
                             <div class="content-tag-line">
@@ -1796,7 +1732,7 @@
                     </div>
                     <div class="first-gallery-img col-padding" onClick="goToPage(56);">
                         <div class="imgg">
-                            <img src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2023/04/MN-REWARM-Posters.jpg" />
+                            <img loading="lazy" src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2023/04/MN-REWARM-Posters.jpg" />
                         </div>
                         <div class="content-block">
                             <div class="content-tag-line">
@@ -1807,7 +1743,7 @@
                     </div>
                     <div class="first-gallery-img col-padding" onClick="goToPage(57);">
                         <div class="imgg">
-                            <img src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/09/MN-Re-Warm-02-scaled.jpg" />
+                            <img loading="lazy" src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/09/MN-Re-Warm-02-scaled.jpg" />
                         </div>
                         <div class="content-block">
                             <div class="content-tag-line">
@@ -1818,7 +1754,7 @@
                     </div>
                     <div class="first-gallery-img col-padding" onClick="goToPage(58);">
                         <div class="imgg">
-                            <img src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/09/MN-Re-Warm-01A-scaled.jpg" />
+                            <img loading="lazy" src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/09/MN-Re-Warm-01A-scaled.jpg" />
                         </div>
                         <div class="content-block">
                             <div class="content-tag-line">
@@ -1829,7 +1765,7 @@
                     </div>
                     <div class="first-gallery-img col-padding" onClick="goToPage(59);">
                         <div class="imgg">
-                            <img src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/09/MN-Warm-01.jpg" />
+                            <img loading="lazy" src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/09/MN-Warm-01.jpg" />
                         </div>
                         <div class="content-block">
                             <div class="content-tag-line">
@@ -1840,7 +1776,7 @@
                     </div>
                     <div class="first-gallery-img col-padding" onClick="goToPage(60);">
                         <div class="imgg">
-                            <img src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/07/MN-Warm-02.jpg" />
+                            <img loading="lazy" src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/07/MN-Warm-02.jpg" />
                         </div>
                         <div class="content-block">
                             <div class="content-tag-line">
@@ -1851,7 +1787,7 @@
                     </div>
                     <div class="first-gallery-img col-padding" onClick="goToPage(61);">
                         <div class="imgg">
-                            <img src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/09/MN-One-Gov_3-scaled.jpg" />
+                            <img loading="lazy" src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/09/MN-One-Gov_3-scaled.jpg" />
                         </div>
                         <div class="content-block">
                             <div class="content-tag-line">
@@ -1862,7 +1798,7 @@
                     </div>
                     <div class="first-gallery-img col-padding" onClick="goToPage(62);">
                         <div class="imgg">
-                            <img src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2023/04/UC-Language.jpg" />
+                            <img loading="lazy" src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2023/04/UC-Language.jpg" />
                         </div>
                         <div class="content-block">
                             <div class="content-tag-line">
@@ -1873,7 +1809,7 @@
                     </div>
                     <div class="first-gallery-img col-padding" onClick="goToPage(63);">
                         <div class="imgg">
-                            <img src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2023/04/MN-United-Cellars-03.1.jpg" />
+                            <img loading="lazy" src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2023/04/MN-United-Cellars-03.1.jpg" />
                         </div>
                         <div class="content-block">
                             <div class="content-tag-line">
@@ -1884,7 +1820,7 @@
                     </div>
                     <div class="first-gallery-img col-padding" onClick="goToPage(64);">
                         <div class="imgg">
-                            <img src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/09/MN-United-Cellars-01.jpg" />
+                            <img loading="lazy" src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/09/MN-United-Cellars-01.jpg" />
                         </div>
                         <div class="content-block">
                             <div class="content-tag-line">
@@ -1895,7 +1831,7 @@
                     </div>
                     <div class="first-gallery-img col-padding" onClick="goToPage(65);">
                         <div class="imgg">
-                            <img src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2023/04/Perennial-BF-Adshel.jpg" />
+                            <img loading="lazy" src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2023/04/Perennial-BF-Adshel.jpg" />
                         </div>
                         <div class="content-block">
                             <div class="content-tag-line">
@@ -1906,7 +1842,7 @@
                     </div>
                     <div class="first-gallery-img col-padding" onClick="goToPage(66);">
                         <div class="imgg">
-                            <img src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2023/04/SP-Web.jpg" />
+                            <img loading="lazy" src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2023/04/SP-Web.jpg" />
                         </div>
                         <div class="content-block">
                             <div class="content-tag-line">
@@ -1917,7 +1853,7 @@
                     </div>
                     <div class="first-gallery-img col-padding" onClick="goToPage(67);">
                         <div class="imgg">
-                            <img src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/07/MN-SPanetta-03.jpg" />
+                            <img loading="lazy" src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/07/MN-SPanetta-03.jpg" />
                         </div>
                         <div class="content-block">
                             <div class="content-tag-line">
@@ -1928,7 +1864,7 @@
                     </div>
                     <div class="first-gallery-img col-padding" onClick="goToPage(68);">
                         <div class="imgg">
-                            <img src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/07/MN-SPanetta-01.jpg" />
+                            <img loading="lazy" src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/07/MN-SPanetta-01.jpg" />
                         </div>
                         <div class="content-block">
                             <div class="content-tag-line">
@@ -1939,7 +1875,7 @@
                     </div>
                     <div class="first-gallery-img col-padding" onClick="goToPage(69);">
                         <div class="imgg">
-                            <img src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2023/03/MN-SP-BC.jpg" />
+                            <img loading="lazy" src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2023/03/MN-SP-BC.jpg" />
                         </div>
                         <div class="content-block">
                             <div class="content-tag-line">
@@ -1950,7 +1886,7 @@
                     </div>
                     <div class="first-gallery-img col-padding" onClick="goToPage(70);">
                         <div class="imgg">
-                            <img src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2023/04/MN-MHancock-03.jpg" />
+                            <img loading="lazy" src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2023/04/MN-MHancock-03.jpg" />
                         </div>
                         <div class="content-block">
                             <div class="content-tag-line">
@@ -1961,7 +1897,7 @@
                     </div>
                     <div class="first-gallery-img col-padding" onClick="goToPage(71);">
                         <div class="imgg">
-                            <img src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/07/MN-MHancock-01.jpg" />
+                            <img loading="lazy" src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/07/MN-MHancock-01.jpg" />
                         </div>
                         <div class="content-block">
                             <div class="content-tag-line">
@@ -1972,7 +1908,7 @@
                     </div>
                     <div class="first-gallery-img col-padding" onClick="goToPage(72);">
                         <div class="imgg">
-                            <img src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2023/04/MN-Warm-Logo-2.jpg" />
+                            <img loading="lazy" src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2023/04/MN-Warm-Logo-2.jpg" />
                         </div>
                         <div class="content-block">
                             <div class="content-tag-line">
@@ -1983,7 +1919,7 @@
                     </div>
                     <div class="first-gallery-img col-padding" onClick="goToPage(73);">
                         <div class="imgg">
-                            <img src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2023/04/MN-Warm-Web.jpg" />
+                            <img loading="lazy" src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2023/04/MN-Warm-Web.jpg" />
                         </div>
                         <div class="content-block">
                             <div class="content-tag-line">
@@ -1994,7 +1930,7 @@
                     </div>
                     <div class="first-gallery-img col-padding" onClick="goToPage(74);">
                         <div class="imgg">
-                            <img src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2023/04/MN-WARM-Posters.jpg" />
+                            <img loading="lazy" src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2023/04/MN-WARM-Posters.jpg" />
                         </div>
                         <div class="content-block">
                             <div class="content-tag-line">
@@ -2005,7 +1941,7 @@
                     </div>
                     <div class="first-gallery-img col-padding" onClick="goToPage(75);">
                         <div class="imgg">
-                            <img src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/10/MN-Warm-Socials-scaled.jpg" />
+                            <img loading="lazy" src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/10/MN-Warm-Socials-scaled.jpg" />
                         </div>
                         <div class="content-block">
                             <div class="content-tag-line">
@@ -2016,7 +1952,7 @@
                     </div>
                     <div class="first-gallery-img col-padding" onClick="goToPage(76);">
                         <div class="imgg">
-                            <img src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2023/04/LC-Logo.jpg" />
+                            <img loading="lazy" src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2023/04/LC-Logo.jpg" />
                         </div>
                         <div class="content-block">
                             <div class="content-tag-line">
@@ -2027,7 +1963,7 @@
                     </div>
                     <div class="first-gallery-img col-padding" onClick="goToPage(77);">
                         <div class="imgg">
-                            <img src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/07/MN-Lisa-Cugnetto-01.jpg" />
+                            <img loading="lazy" src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/07/MN-Lisa-Cugnetto-01.jpg" />
                         </div>
                         <div class="content-block">
                             <div class="content-tag-line">
@@ -2038,7 +1974,7 @@
                     </div>
                     <div class="first-gallery-img col-padding" onClick="goToPage(78);">
                         <div class="imgg">
-                            <img src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/09/MN_LC_Pencils.jpg" />
+                            <img loading="lazy" src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/09/MN_LC_Pencils.jpg" />
                         </div>
                         <div class="content-block">
                             <div class="content-tag-line">
@@ -2049,7 +1985,7 @@
                     </div>
                     <div class="first-gallery-img col-padding" onClick="goToPage(79);">
                         <div class="imgg">
-                            <img src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2023/04/Trigger-Web.jpg" />
+                            <img loading="lazy" src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2023/04/Trigger-Web.jpg" />
                         </div>
                         <div class="content-block">
                             <div class="content-tag-line">
@@ -2060,7 +1996,7 @@
                     </div>
                     <div class="first-gallery-img col-padding" onClick="goToPage(80);">
                         <div class="imgg">
-                            <img src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/07/MN-RSAI-01.jpg" />
+                            <img loading="lazy" src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/07/MN-RSAI-01.jpg" />
                         </div>
                         <div class="content-block">
                             <div class="content-tag-line">
@@ -2071,7 +2007,7 @@
                     </div>
                     <div class="first-gallery-img col-padding" onClick="goToPage(81);">
                         <div class="imgg">
-                            <img src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/07/MN-RSAI-02.jpg" />
+                            <img loading="lazy" src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/07/MN-RSAI-02.jpg" />
                         </div>
                         <div class="content-block">
                             <div class="content-tag-line">
@@ -2082,7 +2018,7 @@
                     </div>
                     <div class="first-gallery-img col-padding" onClick="goToPage(82);">
                         <div class="imgg">
-                            <img src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/07/MN-RSAI-03.jpg" />
+                            <img loading="lazy" src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/07/MN-RSAI-03.jpg" />
                         </div>
                         <div class="content-block">
                             <div class="content-tag-line">
@@ -2093,7 +2029,7 @@
                     </div>
                     <div class="first-gallery-img col-padding" onClick="goToPage(83);">
                         <div class="imgg">
-                            <img src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/09/MN_Website-Images_2022-scaled.jpg" />
+                            <img loading="lazy" src="https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/09/MN_Website-Images_2022-scaled.jpg" />
                         </div>
                         <div class="content-block">
                             <div class="content-tag-line">
@@ -2952,70 +2888,68 @@
                     $popupOpenElements.removeClass('open');
                 });
 
-                if ($(window).width() < 596) {
+                if (window.innerWidth < 596) {
                     const $mobileElements = $('.banner-mobile, .mcaption, .page-numbers.mobile')
 
-                    $(function () {
-                        $menuLink_index.click(function (e) {
-                            e.preventDefault();
+                    $menuLink_index.click(function (e) {
+                        e.preventDefault();
 
-                            const $infoSecMobileElements = $('#infomation-sec, .banner-mobile, .mcaption, .page-numbers.mobile');
+                        const $infoSecMobileElements = $('#infomation-sec, .banner-mobile, .mcaption, .page-numbers.mobile');
 
-                            if (isIndex) {
-                                $indexSecElement.hide();
-                                $mobileElements.show();
-                                isIndex = false;
-                            } else if (isInformation) {
-                                $informationSecElement.hide();
-                                $mobileElements.show();
-                                isInformation = false;
-                                $infoSecMobileElements.hide();
-                                $indexSecElement.show();
-                                isIndex = true;
-                            } else {
-                                $infoSecMobileElements.hide();
-                                $indexSecElement.show();
-                                isIndex = true;
-                            }
-
-                            $popupCourtainElements.removeClass('open');
-                            $popupOpenElements.removeClass('open');
-                        });
-
-                        $menuLink_information.click(function (e) {
-                            e.preventDefault();
-
-                            if (isInformation) {
-                                $informationSecElement.hide();
-                                $mobileElements.show();
-                                isInformation = false;
-                            } else if (isIndex) {
-                                $indexSecElement.hide();
-                                $mobileElements.show();
-                                isIndex = false;
-                                $('#index-sec, #infomation-sec, .banner-mobile, .mcaption, .page-numbers.mobile').hide();
-                                $informationSecElement.show();
-                                isInformation = true;
-                            } else {
-                                $('#index-sec, #infomation-sec, .banner-mobile, .mcaption, .page-numbers.mobile').hide();
-                                $informationSecElement.show();
-                                isInformation = true;
-                            }
-
-                            $popupCourtainElements.removeClass('open');
-                            $popupOpenElements.removeClass('open');
-                        });
-
-                        $('.madenorth a').click(function (e) {
-                            e.preventDefault();
-
-                            $('#index-sec, #infomation-sec, .banner-mobile').hide();
+                        if (isIndex) {
+                            $indexSecElement.hide();
                             $mobileElements.show();
-                            $popupCourtainElements.removeClass('open');
-                            $popupOpenElements.removeClass('open');
                             isIndex = false;
+                        } else if (isInformation) {
+                            $informationSecElement.hide();
+                            $mobileElements.show();
                             isInformation = false;
-                        });
+                            $infoSecMobileElements.hide();
+                            $indexSecElement.show();
+                            isIndex = true;
+                        } else {
+                            $infoSecMobileElements.hide();
+                            $indexSecElement.show();
+                            isIndex = true;
+                        }
+
+                        $popupCourtainElements.removeClass('open');
+                        $popupOpenElements.removeClass('open');
+                    });
+
+                    $menuLink_information.click(function (e) {
+                        e.preventDefault();
+
+                        if (isInformation) {
+                            $informationSecElement.hide();
+                            $mobileElements.show();
+                            isInformation = false;
+                        } else if (isIndex) {
+                            $indexSecElement.hide();
+                            $mobileElements.show();
+                            isIndex = false;
+                            $('#index-sec, #infomation-sec, .banner-mobile, .mcaption, .page-numbers.mobile').hide();
+                            $informationSecElement.show();
+                            isInformation = true;
+                        } else {
+                            $('#index-sec, #infomation-sec, .banner-mobile, .mcaption, .page-numbers.mobile').hide();
+                            $informationSecElement.show();
+                            isInformation = true;
+                        }
+
+                        $popupCourtainElements.removeClass('open');
+                        $popupOpenElements.removeClass('open');
+                    });
+
+                    $('.madenorth a').click(function (e) {
+                        e.preventDefault();
+
+                        $('#index-sec, #infomation-sec, .banner-mobile').hide();
+                        $mobileElements.show();
+                        $popupCourtainElements.removeClass('open');
+                        $popupOpenElements.removeClass('open');
+                        isIndex = false;
+                        isInformation = false;
                     });
 
                 } else {
