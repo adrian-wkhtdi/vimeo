@@ -454,13 +454,8 @@
                             var index = swiper.realIndex + 1;
                             var max = swiper.slides.length - 2;
 
-                            var denom = max.toString().length;
-                            if (denom <= 1) {
-                                denom = 2;
-                            }
-
-                            $pageIndexElements.html(index);
-                            $('.page-count').html(max);
+                            $pageIndexElements.text(index);
+                            $('.page-count').text(max);
 
                             var slide = swiper.slides[swiper.activeIndex];
                             const $slide = $(slide);
@@ -503,99 +498,75 @@
             }
 
             $(document).ready(function () {
-                $('.page-slide-caption.mobiel').html($('.page-slide-caption.desktop'));
+                $('.page-slide-caption.mobile').html($('.page-slide-caption.desktop'));
+
+                const $pageIndexElements = $('.page-index');
+                const $pageCountElements = $('.page-count');
 
                 new Swiper(".swiper-container", {
                     loop: true,
                     effect: 'fade',
                     autoplay: false,
-                    speed: 800,
+                    speed: 1000,
                     nextButton: '.page-arrow.arrow-right',
                     prevButton: '.page-arrow.arrow-left',
                     onSlideChangeStart: function (swiper) {
                         var index = swiper.realIndex + 1;
                         var max = swiper.slides.length - 2;
-
-                        var denom = max.toString().length;
-                        if (denom <= 1) {
-                            denom = 2;
-                        }
-
-                        $('.page-index').html(index);
-                        $('.page-count').html(max);
-
                         var slide = swiper.slides[swiper.activeIndex];
-
                         var slide1 = swiper.slides[swiper.activeIndex + 1];
-                        var slide2 = swiper.slides[swiper.activeIndex - 1];
 
-                        var slideX1 = swiper.slides[swiper.activeIndex + 2];
-                        var slideX2 = swiper.slides[swiper.activeIndex - 2];
+                        const $currentSlideElement = $(slide);
+                        const $currentSlideVideoWrapper = $currentSlideElement.find('.vimeo-wrapper');
+                        const $nextSlideElement = $(slide1);
+                        const $nextSlideVideoWrapper = $nextSlideElement.find('.vimeo-wrapper');
 
-                        $('.page-slide-caption.mobile').html($(slide).find('.page-slide-caption.desktop').html());
+                        $pageIndexElements.text(index);
+                        $pageCountElements.text(max);
+
+                        $('.page-slide-caption.mobile').html($currentSlideElement.find('.page-slide-caption.desktop').html());
 
                         $('.swiper-container video').each(function () {
                             this.pause();
                         });
 
-                        var video = $(slide).find('video')[0];
+                        var video = $currentSlideElement.find('video')[0];
                         if (typeof video !== 'undefined') {
                             video.currentTime = 0;
                             video.play();
                         }
 
-                        // Check Next Slide for Vimeo Wrapper
-                        let nextVideo = $(slide1).find('.vimeo-wrapper');
-                        let prevVideo = $(slide2).find('.vimeo-wrapper');
-
-                        if (nextVideo.length > 0) {
-                            let vimeoID = $(nextVideo).attr('vimeo-id');
-                            let videoLoaded = $(nextVideo).attr('video-loaded');
-
+                        if ($currentSlideVideoWrapper.length > 0) {
+                            const vimeoID = $currentSlideVideoWrapper.attr('vimeo-id');
+                            const videoLoaded = $currentSlideVideoWrapper.attr('video-loaded');
                             if (vimeoID && videoLoaded == 'false') {
-                                let vimeoSnippet = '<iframe src="https://player.vimeo.com/video/' + vimeoID + '?background=1&autoplay=1&loop=1&byline=0&title=0" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>';
-                                $(nextVideo).append(vimeoSnippet);
-                                $(nextVideo).attr('video-loaded', 'true');
+                                const vimeoSnippet = '<iframe src="https://player.vimeo.com/video/' + vimeoID + '?background=1&autoplay=1&loop=1&byline=0&title=0" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>';
+                                $currentSlideVideoWrapper.append(vimeoSnippet);
+                                $currentSlideVideoWrapper.attr('video-loaded', 'true');
                             }
                         }
 
-                        if (prevVideo.length > 0) {
-                            let vimeoID = $(prevVideo).attr('vimeo-id');
-                            let videoLoaded = $(prevVideo).attr('video-loaded');
-
+                        // Load next slide's video
+                        if ($nextSlideVideoWrapper.length > 0) {
+                            const vimeoID = $nextSlideVideoWrapper.attr('vimeo-id');
+                            const videoLoaded = $nextSlideVideoWrapper.attr('video-loaded');
                             if (vimeoID && videoLoaded == 'false') {
-                                let vimeoSnippet = '<iframe src="https://player.vimeo.com/video/' + vimeoID + '?background=1&autoplay=1&loop=1&byline=0&title=0" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>';
-                                $(prevVideo).append(vimeoSnippet);
-                                $(prevVideo).attr('video-loaded', 'true');
+                                console.log('loading next slide video', vimeoID);
+                                const vimeoSnippet = '<iframe src="https://player.vimeo.com/video/' + vimeoID + '?background=1&autoplay=1&loop=1&byline=0&title=0" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>';
+                                $nextSlideVideoWrapper.append(vimeoSnippet);
+                                $nextSlideVideoWrapper.attr('video-loaded', 'true');
                             }
                         }
-
-                        // Check Old Slides for Vimeo Wrapper
-                        let oldSlide1 = $(slideX1).find('.vimeo-wrapper');
-                        let oldSlide2 = $(slideX2).find('.vimeo-wrapper');
-
-                        if (oldSlide1.length > 0) {
-                            let vimeoID = $(oldSlide1).attr('vimeo-id');
-                            let videoLoaded = $(oldSlide1).attr('video-loaded');
-
-                            if (vimeoID && videoLoaded == 'true') {
-                                $(oldSlide1).find('iframe').remove();
-                                $(oldSlide1).attr('video-loaded', 'false');
-                            }
-                        }
-
-                        if (oldSlide2.length > 0) {
-                            let vimeoID = $(oldSlide2).attr('vimeo-id');
-                            let videoLoaded = $(oldSlide2).attr('video-loaded');
-
-                            if (vimeoID && videoLoaded == 'true') {
-                                $(oldSlide2).find('iframe').remove();
-                                $(oldSlide2).attr('video-loaded', 'false');
+                        // Load next slide's image
+                        else {
+                            const lazyStyle = $nextSlideElement[0].getAttribute('data-lazy-style');
+                            if (lazyStyle) {
+                                $nextSlideElement.attr('style', lazyStyle);
                             }
                         }
 
                         // Reverse text
-                        if ($(slide).hasClass('reverse-text')) {
+                        if ($currentSlideElement.hasClass('reverse-text')) {
                             $('body').addClass('reverse-text');
                         } else {
                             $('body').removeClass('reverse-text');
@@ -621,7 +592,7 @@
                             </div>
 
 
-                            <div class="page-slide swiper-slide " style='background-image: url(https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2023/05/MN-Altus-03.jpg);'>
+                            <div class="page-slide swiper-slide " data-lazy-style='background-image: url(https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2023/05/MN-Altus-03.jpg);'>
                                 <div class='page-slide-caption desktop'>
                                     <p>
                                         Altus + Edge Agency / <a href="#altus_work" class="mn-popup-trigger">More Info</a> </p>
@@ -657,55 +628,55 @@
                             </div>
 
 
-                            <div class="page-slide swiper-slide " style='background-image: url(https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2023/05/MN_Possible-Brochures-scaled.jpg);'>
+                            <div class="page-slide swiper-slide " data-lazy-style='background-image: url(https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2023/05/MN_Possible-Brochures-scaled.jpg);'>
                                 <div class='page-slide-caption desktop'>
                                     <p>
                                         Possible Investments / <a href="#possible_investments" class="mn-popup-trigger">More Info</a> </p>
                                 </div>
                             </div>
-                            <div class="page-slide swiper-slide " style='background-image: url(https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/09/MN_Possible-Social-scaled.jpg);'>
+                            <div class="page-slide swiper-slide " data-lazy-style='background-image: url(https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/09/MN_Possible-Social-scaled.jpg);'>
                                 <div class='page-slide-caption desktop'>
                                     <p>
                                         Possible Investments / <a href="#possible_investments" class="mn-popup-trigger">More Info</a> </p>
                                 </div>
                             </div>
-                            <div class="page-slide swiper-slide " style='background-image: url(https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/09/MN_Possible-Web-Gif.gif);'>
+                            <div class="page-slide swiper-slide " data-lazy-style='background-image: url(https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/09/MN_Possible-Web-Gif.gif);'>
                                 <div class='page-slide-caption desktop'>
                                     <p>
                                         Possible Investments / <a href="#possible_investments" class="mn-popup-trigger">More Info</a> </p>
                                 </div>
                             </div>
-                            <div class="page-slide swiper-slide reverse-text" style='background-image: url(https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/09/DSG-Gif-Frames.gif);'>
+                            <div class="page-slide swiper-slide reverse-text" data-lazy-style='background-image: url(https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/09/DSG-Gif-Frames.gif);'>
                                 <div class='page-slide-caption desktop'>
                                     <p>
                                         Design Studio Group Architects / <a href="#designstudio_group" class="mn-popup-trigger">More Info</a> </p>
                                 </div>
                             </div>
-                            <div class="page-slide swiper-slide " style='background-image: url(https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/09/MN-DSG-01A-scaled.jpg);'>
+                            <div class="page-slide swiper-slide " data-lazy-style='background-image: url(https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/09/MN-DSG-01A-scaled.jpg);'>
                                 <div class='page-slide-caption desktop'>
                                     <p>
                                         Design Studio Group Architects / <a href="#designstudio_group" class="mn-popup-trigger">More Info</a> </p>
                                 </div>
                             </div>
-                            <div class="page-slide swiper-slide reverse-text" style='background-image: url(https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/07/MN-DSG-04.jpg);'>
+                            <div class="page-slide swiper-slide reverse-text" data-lazy-style='background-image: url(https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/07/MN-DSG-04.jpg);'>
                                 <div class='page-slide-caption desktop'>
                                     <p>
                                         Design Studio Group Architects / <a href="#designstudio_group" class="mn-popup-trigger">More Info</a> </p>
                                 </div>
                             </div>
-                            <div class="page-slide swiper-slide reverse-text" style='background-image: url(https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/09/MN-DSG-03A-scaled.jpg);'>
+                            <div class="page-slide swiper-slide reverse-text" data-lazy-style='background-image: url(https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/09/MN-DSG-03A-scaled.jpg);'>
                                 <div class='page-slide-caption desktop'>
                                     <p>
                                         Design Studio Group Architects / <a href="#designstudio_group" class="mn-popup-trigger">More Info</a> </p>
                                 </div>
                             </div>
-                            <div class="page-slide swiper-slide reverse-text" style='background-image: url(https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/09/MN-DSG-02A-scaled.jpg);'>
+                            <div class="page-slide swiper-slide reverse-text" data-lazy-style='background-image: url(https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/09/MN-DSG-02A-scaled.jpg);'>
                                 <div class='page-slide-caption desktop'>
                                     <p>
                                         Design Studio Group Architects / <a href="#designstudio_group" class="mn-popup-trigger">More Info</a> </p>
                                 </div>
                             </div>
-                            <div class="page-slide swiper-slide reverse-text" style='background-image: url(https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/07/MN-DSG-05.jpg);'>
+                            <div class="page-slide swiper-slide reverse-text" data-lazy-style='background-image: url(https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/07/MN-DSG-05.jpg);'>
                                 <div class='page-slide-caption desktop'>
                                     <p>
                                         Design Studio Group Architects / <a href="#designstudio_group" class="mn-popup-trigger">More Info</a> </p>
@@ -721,7 +692,7 @@
                             </div>
 
 
-                            <div class="page-slide swiper-slide " style='background-image: url(https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2023/04/MN-Folkal-Posters.jpg);'>
+                            <div class="page-slide swiper-slide " data-lazy-style='background-image: url(https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2023/04/MN-Folkal-Posters.jpg);'>
                                 <div class='page-slide-caption desktop'>
                                     <p>
                                         Folkal + Edge Agency / <a href="#folkal_eyewear" class="mn-popup-trigger">More Info</a> </p>
@@ -737,25 +708,25 @@
                             </div>
 
 
-                            <div class="page-slide swiper-slide " style='background-image: url(https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2023/04/MN-Folkal-Adshel.jpg);'>
+                            <div class="page-slide swiper-slide " data-lazy-style='background-image: url(https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2023/04/MN-Folkal-Adshel.jpg);'>
                                 <div class='page-slide-caption desktop'>
                                     <p>
                                         Folkal + Edge Agency / <a href="#folkal_eyewear" class="mn-popup-trigger">More Info</a> </p>
                                 </div>
                             </div>
-                            <div class="page-slide swiper-slide " style='background-image: url(https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/07/MN-Warm-Home-05.jpg);'>
+                            <div class="page-slide swiper-slide " data-lazy-style='background-image: url(https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/07/MN-Warm-Home-05.jpg);'>
                                 <div class='page-slide-caption desktop'>
                                     <p>
                                         Warm Agency – HOME / <a href="#warm_home" class="mn-popup-trigger">More Info</a> </p>
                                 </div>
                             </div>
-                            <div class="page-slide swiper-slide " style='background-image: url(https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/07/MN-Warm-Home-03.jpg);'>
+                            <div class="page-slide swiper-slide " data-lazy-style='background-image: url(https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/07/MN-Warm-Home-03.jpg);'>
                                 <div class='page-slide-caption desktop'>
                                     <p>
                                         Warm Agency – HOME / <a href="#warm_home" class="mn-popup-trigger">More Info</a> </p>
                                 </div>
                             </div>
-                            <div class="page-slide swiper-slide " style='background-image: url(https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/07/MN-Warm-Home-04.jpg);'>
+                            <div class="page-slide swiper-slide " data-lazy-style='background-image: url(https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/07/MN-Warm-Home-04.jpg);'>
                                 <div class='page-slide-caption desktop'>
                                     <p>
                                         Warm Agency – HOME / <a href="#warm_home" class="mn-popup-trigger">More Info</a> </p>
@@ -771,19 +742,19 @@
                             </div>
 
 
-                            <div class="page-slide swiper-slide " style='background-image: url(https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/07/MN-Warm-Home-02.jpg);'>
+                            <div class="page-slide swiper-slide " data-lazy-style='background-image: url(https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/07/MN-Warm-Home-02.jpg);'>
                                 <div class='page-slide-caption desktop'>
                                     <p>
                                         Warm Agency – HOME / <a href="#warm_home" class="mn-popup-trigger">More Info</a> </p>
                                 </div>
                             </div>
-                            <div class="page-slide swiper-slide " style='background-image: url(https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/07/MN-Warm-Home-06.jpg);'>
+                            <div class="page-slide swiper-slide " data-lazy-style='background-image: url(https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/07/MN-Warm-Home-06.jpg);'>
                                 <div class='page-slide-caption desktop'>
                                     <p>
                                         Warm Agency – HOME / <a href="#warm_home" class="mn-popup-trigger">More Info</a> </p>
                                 </div>
                             </div>
-                            <div class="page-slide swiper-slide " style='background-image: url(https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/07/MN-Warm-Home-Remixes.jpg);'>
+                            <div class="page-slide swiper-slide " data-lazy-style='background-image: url(https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/07/MN-Warm-Home-Remixes.jpg);'>
                                 <div class='page-slide-caption desktop'>
                                     <p>
                                         Warm Agency – HOME / <a href="#warm_home" class="mn-popup-trigger">More Info</a> </p>
@@ -809,19 +780,19 @@
                             </div>
 
 
-                            <div class="page-slide swiper-slide " style='background-image: url(https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/07/MN_RIT-Guidelines.gif);'>
+                            <div class="page-slide swiper-slide " data-lazy-style='background-image: url(https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/07/MN_RIT-Guidelines.gif);'>
                                 <div class='page-slide-caption desktop'>
                                     <p>
                                         Releaseit + Edge Agency / <a href="#release_it" class="mn-popup-trigger">More Info</a> </p>
                                 </div>
                             </div>
-                            <div class="page-slide swiper-slide " style='background-image: url(https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2023/03/MN_Releaseit_02.jpg);'>
+                            <div class="page-slide swiper-slide " data-lazy-style='background-image: url(https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2023/03/MN_Releaseit_02.jpg);'>
                                 <div class='page-slide-caption desktop'>
                                     <p>
                                         Releaseit + Edge Agency / <a href="#release_it" class="mn-popup-trigger">More Info</a> </p>
                                 </div>
                             </div>
-                            <div class="page-slide swiper-slide " style='background-image: url(https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2023/03/MN_Releaseit_03.jpg);'>
+                            <div class="page-slide swiper-slide " data-lazy-style='background-image: url(https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2023/03/MN_Releaseit_03.jpg);'>
                                 <div class='page-slide-caption desktop'>
                                     <p>
                                         Releaseit + Edge Agency / <a href="#release_it" class="mn-popup-trigger">More Info</a> </p>
@@ -837,19 +808,19 @@
                             </div>
 
 
-                            <div class="page-slide swiper-slide " style='background-image: url(https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/09/MN-PHF-02.png);'>
+                            <div class="page-slide swiper-slide " data-lazy-style='background-image: url(https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/09/MN-PHF-02.png);'>
                                 <div class='page-slide-caption desktop'>
                                     <p>
                                         Premier Home Finders / <a href="#premierhome_finders" class="mn-popup-trigger">More Info</a> </p>
                                 </div>
                             </div>
-                            <div class="page-slide swiper-slide reverse-text" style='background-image: url(https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/07/MN-PHF-01.jpg);'>
+                            <div class="page-slide swiper-slide reverse-text" data-lazy-style='background-image: url(https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/07/MN-PHF-01.jpg);'>
                                 <div class='page-slide-caption desktop'>
                                     <p>
                                         Premier Home Finders / <a href="#premierhome_finders" class="mn-popup-trigger">More Info</a> </p>
                                 </div>
                             </div>
-                            <div class="page-slide swiper-slide " style='background-image: url(https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/09/MN-PHF-03.jpg);'>
+                            <div class="page-slide swiper-slide " data-lazy-style='background-image: url(https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/09/MN-PHF-03.jpg);'>
                                 <div class='page-slide-caption desktop'>
                                     <p>
                                         Premier Home Finders / <a href="#premierhome_finders" class="mn-popup-trigger">More Info</a> </p>
@@ -865,83 +836,83 @@
                             </div>
 
 
-                            <div class="page-slide swiper-slide " style='background-image: url(https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2023/04/MN-FABPREFAB-03.jpg);'>
+                            <div class="page-slide swiper-slide " data-lazy-style='background-image: url(https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2023/04/MN-FABPREFAB-03.jpg);'>
                                 <div class='page-slide-caption desktop'>
                                     <p>
                                         FABPREFAB / <a href="#fab_prefab" class="mn-popup-trigger">More Info</a> </p>
                                 </div>
                             </div>
-                            <div class="page-slide swiper-slide reverse-text" style='background-image: url(https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/07/MN-FABPREFAB-01.jpg);'>
+                            <div class="page-slide swiper-slide reverse-text" data-lazy-style='background-image: url(https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/07/MN-FABPREFAB-01.jpg);'>
                                 <div class='page-slide-caption desktop'>
                                     <p>
                                         FABPREFAB / <a href="#fab_prefab" class="mn-popup-trigger">More Info</a> </p>
                                 </div>
                             </div>
-                            <div class="page-slide swiper-slide reverse-text" style='background-image: url(https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/07/MN-FABPREFAB-02.jpg);'>
+                            <div class="page-slide swiper-slide reverse-text" data-lazy-style='background-image: url(https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/07/MN-FABPREFAB-02.jpg);'>
                                 <div class='page-slide-caption desktop'>
                                     <p>
                                         FABPREFAB / <a href="#fab_prefab" class="mn-popup-trigger">More Info</a> </p>
                                 </div>
                             </div>
-                            <div class="page-slide swiper-slide reverse-text" style='background-image: url(https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/07/MN-FF-Hero.jpg);'>
+                            <div class="page-slide swiper-slide reverse-text" data-lazy-style='background-image: url(https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/07/MN-FF-Hero.jpg);'>
                                 <div class='page-slide-caption desktop'>
                                     <p>
                                         Friends&amp;Family Hair Salon / <a href="#friends_family" class="mn-popup-trigger">More Info</a> </p>
                                 </div>
                             </div>
-                            <div class="page-slide swiper-slide " style='background-image: url(https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/09/MN-FF-BCard-01-scaled.jpg);'>
+                            <div class="page-slide swiper-slide " data-lazy-style='background-image: url(https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/09/MN-FF-BCard-01-scaled.jpg);'>
                                 <div class='page-slide-caption desktop'>
                                     <p>
                                         Friends&amp;Family Hair Salon / <a href="#friends_family" class="mn-popup-trigger">More Info</a> </p>
                                 </div>
                             </div>
-                            <div class="page-slide swiper-slide " style='background-image: url(https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/09/MN-FF-Window-scaled.jpg);'>
+                            <div class="page-slide swiper-slide " data-lazy-style='background-image: url(https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/09/MN-FF-Window-scaled.jpg);'>
                                 <div class='page-slide-caption desktop'>
                                     <p>
                                         Friends&amp;Family Hair Salon / <a href="#friends_family" class="mn-popup-trigger">More Info</a> </p>
                                 </div>
                             </div>
-                            <div class="page-slide swiper-slide " style='background-image: url(https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/09/MN-FF-Socials-scaled.jpg);'>
+                            <div class="page-slide swiper-slide " data-lazy-style='background-image: url(https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/09/MN-FF-Socials-scaled.jpg);'>
                                 <div class='page-slide-caption desktop'>
                                     <p>
                                         Friends&amp;Family Hair Salon
                                         / <a href="#friends_family" class="mn-popup-trigger">More Info</a> </p>
                                 </div>
                             </div>
-                            <div class="page-slide swiper-slide " style='background-image: url(https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2023/03/MN-FlyingFish.jpg);'>
+                            <div class="page-slide swiper-slide " data-lazy-style='background-image: url(https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2023/03/MN-FlyingFish.jpg);'>
                                 <div class='page-slide-caption desktop'>
                                     <p>
                                         Flying Fish Restaurant / <a href="#flying_fish" class="mn-popup-trigger">More Info</a> </p>
                                 </div>
                             </div>
-                            <div class="page-slide swiper-slide " style='background-image: url(https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2023/03/MN-FlyingFish-01.jpg);'>
+                            <div class="page-slide swiper-slide " data-lazy-style='background-image: url(https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2023/03/MN-FlyingFish-01.jpg);'>
                                 <div class='page-slide-caption desktop'>
                                     <p>
                                         Flying Fish Restaurant / <a href="#flying_fish" class="mn-popup-trigger">More Info</a> </p>
                                 </div>
                             </div>
-                            <div class="page-slide swiper-slide " style='background-image: url(https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/09/MN-Plenti-01.jpg);'>
+                            <div class="page-slide swiper-slide " data-lazy-style='background-image: url(https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/09/MN-Plenti-01.jpg);'>
                                 <div class='page-slide-caption desktop'>
                                     <p>
                                         Plenti Finance
                                         / <a href="#plenti_finance" class="mn-popup-trigger">More Info</a> </p>
                                 </div>
                             </div>
-                            <div class="page-slide swiper-slide reverse-text" style='background-image: url(https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/10/MN-Plenti-04-scaled.jpg);'>
+                            <div class="page-slide swiper-slide reverse-text" data-lazy-style='background-image: url(https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/10/MN-Plenti-04-scaled.jpg);'>
                                 <div class='page-slide-caption desktop'>
                                     <p>
                                         Plenti Finance
                                         / <a href="#plenti_finance" class="mn-popup-trigger">More Info</a> </p>
                                 </div>
                             </div>
-                            <div class="page-slide swiper-slide reverse-text" style='background-image: url(https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/10/MN-Plenti-06-scaled.jpg);'>
+                            <div class="page-slide swiper-slide reverse-text" data-lazy-style='background-image: url(https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/10/MN-Plenti-06-scaled.jpg);'>
                                 <div class='page-slide-caption desktop'>
                                     <p>
                                         Plenti Finance
                                         / <a href="#plenti_finance" class="mn-popup-trigger">More Info</a> </p>
                                 </div>
                             </div>
-                            <div class="page-slide swiper-slide reverse-text" style='background-image: url(https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2023/03/MN-Plenti-05.jpg);'>
+                            <div class="page-slide swiper-slide reverse-text" data-lazy-style='background-image: url(https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2023/03/MN-Plenti-05.jpg);'>
                                 <div class='page-slide-caption desktop'>
                                     <p>
                                         Plenti Finance
@@ -958,19 +929,19 @@
                             </div>
 
 
-                            <div class="page-slide swiper-slide " style='background-image: url(https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/07/MN-Potter-Wilson-03.jpg);'>
+                            <div class="page-slide swiper-slide " data-lazy-style='background-image: url(https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/07/MN-Potter-Wilson-03.jpg);'>
                                 <div class='page-slide-caption desktop'>
                                     <p>
                                         Potter &amp; Wilson Architects / <a href="#potter_wilson" class="mn-popup-trigger">More Info</a> </p>
                                 </div>
                             </div>
-                            <div class="page-slide swiper-slide " style='background-image: url(https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/09/MN-Potter-Wilson-02A.jpg);'>
+                            <div class="page-slide swiper-slide " data-lazy-style='background-image: url(https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/09/MN-Potter-Wilson-02A.jpg);'>
                                 <div class='page-slide-caption desktop'>
                                     <p>
                                         Potter &amp; Wilson Architects / <a href="#potter_wilson" class="mn-popup-trigger">More Info</a> </p>
                                 </div>
                             </div>
-                            <div class="page-slide swiper-slide " style='background-image: url(https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/07/MN-Potter-Wilson-01.jpg);'>
+                            <div class="page-slide swiper-slide " data-lazy-style='background-image: url(https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/07/MN-Potter-Wilson-01.jpg);'>
                                 <div class='page-slide-caption desktop'>
                                     <p>
                                         Potter &amp; Wilson Architects / <a href="#potter_wilson" class="mn-popup-trigger">More Info</a> </p>
@@ -986,7 +957,7 @@
                             </div>
 
 
-                            <div class="page-slide swiper-slide " style='background-image: url(https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/07/MN-Re-Warm-03.jpg);'>
+                            <div class="page-slide swiper-slide " data-lazy-style='background-image: url(https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/07/MN-Re-Warm-03.jpg);'>
                                 <div class='page-slide-caption desktop'>
                                     <p>
                                         Re:Warm / <a href="#re_warm" class="mn-popup-trigger">More Info</a> </p>
@@ -1002,37 +973,37 @@
                             </div>
 
 
-                            <div class="page-slide swiper-slide " style='background-image: url(https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2023/04/MN-REWARM-Posters.jpg);'>
+                            <div class="page-slide swiper-slide " data-lazy-style='background-image: url(https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2023/04/MN-REWARM-Posters.jpg);'>
                                 <div class='page-slide-caption desktop'>
                                     <p>
                                         Re:Warm / <a href="#re_warm" class="mn-popup-trigger">More Info</a> </p>
                                 </div>
                             </div>
-                            <div class="page-slide swiper-slide " style='background-image: url(https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/09/MN-Re-Warm-02-scaled.jpg);'>
+                            <div class="page-slide swiper-slide " data-lazy-style='background-image: url(https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/09/MN-Re-Warm-02-scaled.jpg);'>
                                 <div class='page-slide-caption desktop'>
                                     <p>
                                         Re:Warm Series / <a href="#re_warm" class="mn-popup-trigger">More Info</a> </p>
                                 </div>
                             </div>
-                            <div class="page-slide swiper-slide " style='background-image: url(https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/09/MN-Re-Warm-01A-scaled.jpg);'>
+                            <div class="page-slide swiper-slide " data-lazy-style='background-image: url(https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/09/MN-Re-Warm-01A-scaled.jpg);'>
                                 <div class='page-slide-caption desktop'>
                                     <p>
                                         Re:Warm Series / <a href="#re_warm" class="mn-popup-trigger">More Info</a> </p>
                                 </div>
                             </div>
-                            <div class="page-slide swiper-slide " style='background-image: url(https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/09/MN-Warm-01.jpg);'>
+                            <div class="page-slide swiper-slide " data-lazy-style='background-image: url(https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/09/MN-Warm-01.jpg);'>
                                 <div class='page-slide-caption desktop'>
                                     <p>
                                         Re:Warm Series / <a href="#re_warm" class="mn-popup-trigger">More Info</a> </p>
                                 </div>
                             </div>
-                            <div class="page-slide swiper-slide " style='background-image: url(https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/07/MN-Warm-02.jpg);'>
+                            <div class="page-slide swiper-slide " data-lazy-style='background-image: url(https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/07/MN-Warm-02.jpg);'>
                                 <div class='page-slide-caption desktop'>
                                     <p>
                                         Re:Warm Series / <a href="#re_warm" class="mn-popup-trigger">More Info</a> </p>
                                 </div>
                             </div>
-                            <div class="page-slide swiper-slide " style='background-image: url(https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/09/MN-One-Gov_3-scaled.jpg);'>
+                            <div class="page-slide swiper-slide " data-lazy-style='background-image: url(https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/09/MN-One-Gov_3-scaled.jpg);'>
                                 <div class='page-slide-caption desktop'>
                                     <p>
                                         NSW Government: OneGov / <a href="#one_gov" class="mn-popup-trigger">More Info</a> </p>
@@ -1048,13 +1019,13 @@
                             </div>
 
 
-                            <div class="page-slide swiper-slide " style='background-image: url(https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2023/04/MN-United-Cellars-03.1.jpg);'>
+                            <div class="page-slide swiper-slide " data-lazy-style='background-image: url(https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2023/04/MN-United-Cellars-03.1.jpg);'>
                                 <div class='page-slide-caption desktop'>
                                     <p>
                                         United Cellars + Edge Agency / <a href="#united_cellars" class="mn-popup-trigger">More Info</a> </p>
                                 </div>
                             </div>
-                            <div class="page-slide swiper-slide " style='background-image: url(https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/09/MN-United-Cellars-01.jpg);'>
+                            <div class="page-slide swiper-slide " data-lazy-style='background-image: url(https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/09/MN-United-Cellars-01.jpg);'>
                                 <div class='page-slide-caption desktop'>
                                     <p>
                                         United Cellars + Edge Agency / <a href="#united_cellars" class="mn-popup-trigger">More Info</a> </p>
@@ -1080,19 +1051,19 @@
                             </div>
 
 
-                            <div class="page-slide swiper-slide " style='background-image: url(https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/07/MN-SPanetta-03.jpg);'>
+                            <div class="page-slide swiper-slide " data-lazy-style='background-image: url(https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/07/MN-SPanetta-03.jpg);'>
                                 <div class='page-slide-caption desktop'>
                                     <p>
                                         Studio Panetta / <a href="#studio_panetta" class="mn-popup-trigger">More Info</a> </p>
                                 </div>
                             </div>
-                            <div class="page-slide swiper-slide " style='background-image: url(https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/07/MN-SPanetta-01.jpg);'>
+                            <div class="page-slide swiper-slide " data-lazy-style='background-image: url(https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/07/MN-SPanetta-01.jpg);'>
                                 <div class='page-slide-caption desktop'>
                                     <p>
                                         Studio Panetta / <a href="#studio_panetta" class="mn-popup-trigger">More Info</a> </p>
                                 </div>
                             </div>
-                            <div class="page-slide swiper-slide " style='background-image: url(https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2023/03/MN-SP-BC.jpg);'>
+                            <div class="page-slide swiper-slide " data-lazy-style='background-image: url(https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2023/03/MN-SP-BC.jpg);'>
                                 <div class='page-slide-caption desktop'>
                                     <p>
                                         Studio Panetta / <a href="#studio_panetta" class="mn-popup-trigger">More Info</a> </p>
@@ -1108,31 +1079,31 @@
                             </div>
 
 
-                            <div class="page-slide swiper-slide " style='background-image: url(https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/07/MN-MHancock-01.jpg);'>
+                            <div class="page-slide swiper-slide " data-lazy-style='background-image: url(https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/07/MN-MHancock-01.jpg);'>
                                 <div class='page-slide-caption desktop'>
                                     <p>
                                         Madeleine Hancock / <a href="#mad_hancock" class="mn-popup-trigger">More Info</a> </p>
                                 </div>
                             </div>
-                            <div class="page-slide swiper-slide " style='background-image: url(https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2023/04/MN-Warm-Logo-2.jpg);'>
+                            <div class="page-slide swiper-slide " data-lazy-style='background-image: url(https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2023/04/MN-Warm-Logo-2.jpg);'>
                                 <div class='page-slide-caption desktop'>
                                     <p>
                                         Warm Agency / <a href="#warm_agency" class="mn-popup-trigger">More Info</a> </p>
                                 </div>
                             </div>
-                            <div class="page-slide swiper-slide " style='background-image: url(https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2023/04/MN-Warm-Web.jpg);'>
+                            <div class="page-slide swiper-slide " data-lazy-style='background-image: url(https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2023/04/MN-Warm-Web.jpg);'>
                                 <div class='page-slide-caption desktop'>
                                     <p>
                                         Warm Agency / <a href="#warm_agency" class="mn-popup-trigger">More Info</a> </p>
                                 </div>
                             </div>
-                            <div class="page-slide swiper-slide " style='background-image: url(https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2023/04/MN-WARM-Posters.jpg);'>
+                            <div class="page-slide swiper-slide " data-lazy-style='background-image: url(https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2023/04/MN-WARM-Posters.jpg);'>
                                 <div class='page-slide-caption desktop'>
                                     <p>
                                         Warm Agency / <a href="#warm_agency" class="mn-popup-trigger">More Info</a> </p>
                                 </div>
                             </div>
-                            <div class="page-slide swiper-slide " style='background-image: url(https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/10/MN-Warm-Socials-scaled.jpg);'>
+                            <div class="page-slide swiper-slide " data-lazy-style='background-image: url(https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/10/MN-Warm-Socials-scaled.jpg);'>
                                 <div class='page-slide-caption desktop'>
                                     <p>
                                         Warm Agency / <a href="#warm_agency" class="mn-popup-trigger">More Info</a> </p>
@@ -1148,13 +1119,13 @@
                             </div>
 
 
-                            <div class="page-slide swiper-slide " style='background-image: url(https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/07/MN-Lisa-Cugnetto-01.jpg);'>
+                            <div class="page-slide swiper-slide " data-lazy-style='background-image: url(https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/07/MN-Lisa-Cugnetto-01.jpg);'>
                                 <div class='page-slide-caption desktop'>
                                     <p>
                                         Lisa Cugnetto / <a href="#lisa_cugnetto" class="mn-popup-trigger">More Info</a> </p>
                                 </div>
                             </div>
-                            <div class="page-slide swiper-slide " style='background-image: url(https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/09/MN_LC_Pencils.jpg);'>
+                            <div class="page-slide swiper-slide " data-lazy-style='background-image: url(https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/09/MN_LC_Pencils.jpg);'>
                                 <div class='page-slide-caption desktop'>
                                     <p>
                                         Lisa Cugnetto / <a href="#lisa_cugnetto" class="mn-popup-trigger">More Info</a> </p>
@@ -1170,27 +1141,27 @@
                             </div>
 
 
-                            <div class="page-slide swiper-slide " style='background-image: url(https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/07/MN-RSAI-01.jpg);'>
+                            <div class="page-slide swiper-slide " data-lazy-style='background-image: url(https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/07/MN-RSAI-01.jpg);'>
                                 <div class='page-slide-caption desktop'>
                                     <p>
                                         Rebecca Shaw
                                         / <a href="#rebecca_shaw" class="mn-popup-trigger">More Info</a> </p>
                                 </div>
                             </div>
-                            <div class="page-slide swiper-slide " style='background-image: url(https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/07/MN-RSAI-02.jpg);'>
+                            <div class="page-slide swiper-slide " data-lazy-style='background-image: url(https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/07/MN-RSAI-02.jpg);'>
                                 <div class='page-slide-caption desktop'>
                                     <p>
                                         Rebecca Shaw / <a href="#rebecca_shaw" class="mn-popup-trigger">More Info</a> </p>
                                 </div>
                             </div>
-                            <div class="page-slide swiper-slide " style='background-image: url(https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/07/MN-RSAI-03.jpg);'>
+                            <div class="page-slide swiper-slide " data-lazy-style='background-image: url(https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/07/MN-RSAI-03.jpg);'>
                                 <div class='page-slide-caption desktop'>
                                     <p>
                                         Rebecca Shaw
                                         / <a href="#rebecca_shaw" class="mn-popup-trigger">More Info</a> </p>
                                 </div>
                             </div>
-                            <div class="page-slide swiper-slide " style='background-image: url(https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/09/MN_Website-Images_2022-scaled.jpg);'>
+                            <div class="page-slide swiper-slide " data-lazy-style='background-image: url(https://wordpress-785153-3343310.cloudwaysapps.com/wp-content/uploads/2022/09/MN_Website-Images_2022-scaled.jpg);'>
                                 <div class='page-slide-caption desktop'>
                                     <p>
                                         Growth to Success / <a href="#growth_success" class="mn-popup-trigger">More Info</a> </p>
@@ -2961,18 +2932,6 @@
                 const $menuLink_information = $('#menu-item-416 a');
                 const $menuLink_index = $('#menu-item-415 a');
                 const $mainMenuLinkElements = $('#menu-main-menu li a');
-
-                if (firstVimeo) {
-                    let vimeoSnippet = '<iframe src="https://player.vimeo.com/video/' + firstVimeo + '?background=1&autoplay=1&loop=1&byline=0&title=0" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>';
-                    activeSlide.append(vimeoSnippet);
-                    activeSlide.attr('video-loaded', 'true');
-                }
-
-                if (secondVimeo) {
-                    let vimeoSnippet = '<iframe src="https://player.vimeo.com/video/' + secondVimeo + '?background=1&autoplay=1&loop=1&byline=0&title=0" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>';
-                    nextSlide.append(vimeoSnippet);
-                    nextSlide.attr('video-loaded', 'true');
-                }
 
                 $('.mn-popup-trigger').click(function (e) {
                     e.preventDefault();
