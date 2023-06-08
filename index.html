@@ -444,62 +444,94 @@
                 $("html, body").animate({ scrollTop: 0 }, "slow");
             }
 
+            function assemble($slideWrapper) {
+                if ($slideWrapper.length == 0) return;
+
+                const $videoWrapper = $slideWrapper.find('.vimeo-wrapper');
+
+                // slide has video
+                if ($videoWrapper.length > 0) {
+                    const vimeo_id = $videoWrapper.attr('vimeo-id');
+                    const video_loaded = $videoWrapper.attr('video-loaded');
+                    if (vimeo_id && video_loaded === 'false') {
+                        const vimeo_snippet = '<iframe src="https://player.vimeo.com/video/' + vimeo_id + '?background=1&autoplay=1&loop=1&byline=0&title=0" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>';
+                        $videoWrapper.append(vimeo_snippet);
+                        $videoWrapper.attr('video-loaded', 'true');
+                    }
+                }
+                // slide has image
+                else {
+                    const lazy_style = $slideWrapper[0].getAttribute('data-lazy-style');
+                    if (lazy_style) {
+                        $slideWrapper.attr('style', lazy_style);
+                    }
+                }
+            }
+
+            function disassemble($slideWrapper) {
+                if ($slideWrapper.length == 0) return;
+
+                const $videoWrapper = $slideWrapper.find('.vimeo-wrapper');
+
+                // slide has video
+                if ($videoWrapper.length > 0) {
+                    const vimeo_id = $videoWrapper.attr('vimeo-id');
+                    const video_loaded = $videoWrapper.attr('video-loaded');
+                    if (vimeo_id && video_loaded === 'true') {
+                        $videoWrapper.find('iframe').remove();
+                        $videoWrapper.attr('video-loaded', 'false');
+                    }
+                }
+                // slide has image
+                else {
+                    $slideWrapper.attr('style', '');
+                }
+            }
+
             $(document).ready(function () {
+                const $body = $('body');
                 const $pageIndexElements = $('.page-index');
                 const $pageCountElements = $('.page-count');
 
                 new Swiper(".swiper-container", {
+                    preloadImages: false,
                     loop: true,
                     effect: 'fade',
                     autoplay: false,
-                    speed: 900,
+                    speed: 800,
                     nextButton: '.page-arrow.arrow-right',
                     prevButton: '.page-arrow.arrow-left',
+                    onSlideChangeEnd: function (swiper) {
+                        const slide_count = swiper.slides.length - 2; // swiper adds 2 extra elements to the slides array (loop = true)
+
+                        // going forward
+                        if (swiper.activeIndex > swiper.previousIndex) {
+                            const prev_index = swiper.previousIndex <= 0 ? slide_count - 1 : swiper.previousIndex;
+                            const prew_item_selector = swiper.slides[prev_index];
+                            disassemble(swiper.wrapper.find(prew_item_selector));
+                        }
+                        // going backwards
+                        else {
+                            const next_index = swiper.activeIndex + 1 > slide_count - 1 ? 0 : swiper.activeIndex + 2;
+                            const next_item_selector = swiper.slides[next_index];
+                            disassemble(swiper.wrapper.find(next_item_selector));
+                        }
+                    },
                     onSlideChangeStart: function (swiper) {
-                        var index = swiper.realIndex + 1;
-                        var max = swiper.slides.length - 2;
-                        var slide = swiper.slides[swiper.activeIndex];
-                        var slide1 = swiper.slides[swiper.activeIndex + 1];
+                        const slide_count = swiper.slides.length - 2; // swiper adds 2 extra elements to the slides array (loop = true)
+                        var currentSlide = swiper.slides[swiper.activeIndex];
+                        var nextSlide = swiper.slides[swiper.activeIndex + 1];
 
-                        const $body = $('body');
-                        const $currentSlideElement = $(slide);
-                        const $currentSlideVideoWrapper = $currentSlideElement.find('.vimeo-wrapper');
-                        const $nextSlideElement = $(slide1);
-                        const $nextSlideVideoWrapper = $nextSlideElement.find('.vimeo-wrapper');
+                        const $currentSlideElement = swiper.wrapper.find(currentSlide);
+                        const $nextSlideElement = swiper.wrapper.find(nextSlide);
 
-                        $pageIndexElements.text(index);
-                        $pageCountElements.text(max);
+                        $pageIndexElements.text(swiper.realIndex + 1);
+                        $pageCountElements.text(slide_count);
 
                         $('.page-slide-caption.mobile').html($currentSlideElement.find('.page-slide-caption.desktop').html());
 
-                        if ($currentSlideVideoWrapper.length > 0) {
-                            const vimeoID = $currentSlideVideoWrapper.attr('vimeo-id');
-                            const videoLoaded = $currentSlideVideoWrapper.attr('video-loaded');
-                            if (vimeoID && videoLoaded == 'false') {
-                                const vimeoSnippet = '<iframe src="https://player.vimeo.com/video/' + vimeoID + '?background=1&autoplay=1&loop=1&byline=0&title=0" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>';
-                                $currentSlideVideoWrapper.append(vimeoSnippet);
-                                $currentSlideVideoWrapper.attr('video-loaded', 'true');
-                            }
-                        }
-
-                        // Load next slide's video
-                        if ($nextSlideVideoWrapper.length > 0) {
-                            const vimeoID = $nextSlideVideoWrapper.attr('vimeo-id');
-                            const videoLoaded = $nextSlideVideoWrapper.attr('video-loaded');
-                            if (vimeoID && videoLoaded == 'false') {
-                                console.log('loading next slide video', vimeoID);
-                                const vimeoSnippet = '<iframe src="https://player.vimeo.com/video/' + vimeoID + '?background=1&autoplay=1&loop=1&byline=0&title=0" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>';
-                                $nextSlideVideoWrapper.append(vimeoSnippet);
-                                $nextSlideVideoWrapper.attr('video-loaded', 'true');
-                            }
-                        }
-                        // Load next slide's image
-                        else {
-                            const lazyStyle = $nextSlideElement[0].getAttribute('data-lazy-style');
-                            if (lazyStyle) {
-                                $nextSlideElement.attr('style', lazyStyle);
-                            }
-                        }
+                        assemble($currentSlideElement);
+                        assemble($nextSlideElement);
 
                         // Reverse text
                         if ($currentSlideElement.hasClass('reverse-text')) {
@@ -509,7 +541,6 @@
                         }
                     }
                 });
-
             });
         </script>
         <div class='page-slide-caption mobile position-header-content mcaption'></div>
@@ -2869,7 +2900,7 @@
                 const $menuLink_index = $('#menu-item-415 a');
                 const $mainMenuLinkElements = $('#menu-main-menu li a');
 
-                $('.mn-popup-trigger').click(function (e) {
+                $(document).on('click', '.mn-popup-trigger', function (e) {
                     e.preventDefault();
                     let target = $(this).attr('href');
                     $(target).addClass('open');
