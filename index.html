@@ -507,23 +507,18 @@
                         // going forward
                         if (swiper.activeIndex > swiper.previousIndex) {
                             const prev_index = swiper.previousIndex <= 0 ? slide_count - 1 : swiper.previousIndex;
-                            const prew_item_selector = swiper.slides[prev_index];
-                            disassemble(swiper.wrapper.find(prew_item_selector));
+                            disassemble($(swiper.slides[prev_index]));
                         }
                         // going backwards
                         else {
                             const next_index = swiper.activeIndex + 1 > slide_count - 1 ? 0 : swiper.activeIndex + 2;
-                            const next_item_selector = swiper.slides[next_index];
-                            disassemble(swiper.wrapper.find(next_item_selector));
+                            disassemble($(swiper.slides[next_index]));
                         }
                     },
                     onSlideChangeStart: function (swiper) {
                         const slide_count = swiper.slides.length - 2; // swiper adds 2 extra elements to the slides array (loop = true)
-                        var currentSlide = swiper.slides[swiper.activeIndex];
-                        var nextSlide = swiper.slides[swiper.activeIndex + 1];
-
-                        const $currentSlideElement = swiper.wrapper.find(currentSlide);
-                        const $nextSlideElement = swiper.wrapper.find(nextSlide);
+                        const $currentSlideElement = $(swiper.slides[swiper.activeIndex]);
+                        const $nextSlideElement = $(swiper.slides[swiper.activeIndex + 1]);
 
                         $pageIndexElements.text(swiper.realIndex + 1);
                         $pageCountElements.text(slide_count);
